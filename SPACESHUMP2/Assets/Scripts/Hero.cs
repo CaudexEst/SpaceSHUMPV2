@@ -3,7 +3,7 @@
  * Date Created: March 16, 2022
  * 
  * Last Edited by: Ben Jenkins 
- * Last Edited: 4/13/2022
+ * Last Edited: 4/14/2022
  * 
  * Description: Hero ship controller
 ****/
@@ -38,13 +38,17 @@ public class Hero : MonoBehaviour
     #endregion
 
     GameManager gm; //reference to game manager
+    ObjectPool pool;
 
     [Header("Ship Movement")]
     public float speed = 10;
     public float rollMult = -45;
     public float pitchMult = 30;
 
-
+    [Space(10)]
+    [Header("Projectile Settings")]
+    //public GameObject projectilePrefab;
+    public float projectileSpeed = 40;
 
     [Space(10)]
 
@@ -87,6 +91,7 @@ public class Hero : MonoBehaviour
     private void Start()
     {
         gm = GameManager.GM; //find the game manager
+        pool = ObjectPool.POOL;
     }//end Start()
 
 
@@ -107,10 +112,10 @@ public class Hero : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    TempFire();
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+           FireProjectile();
+        }
 
 
 
@@ -141,4 +146,15 @@ public class Hero : MonoBehaviour
         }
     }//end OnTriggerEnter()
 
+    void FireProjectile()
+    {
+        GameObject projectile = pool.GetObject();
+        if (projectile != null)
+        {
+            projectile.transform.position = transform.position;
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            rb.velocity = Vector3.up * projectileSpeed;
+        }
+        
+    }
 }
