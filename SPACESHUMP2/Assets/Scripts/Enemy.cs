@@ -46,9 +46,9 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       //Call the Move Method
+        //Call the Move Method
 
-
+        Move();
         //Check if bounds check exists and the object is off the bottom of the screne
         if(bndCheck != null && bndCheck.offDown)
         {

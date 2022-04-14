@@ -3,7 +3,7 @@
  * Date Created: March 16, 2022
  * 
  * Last Edited by: Ben Jenkins 
- * Last Edited: 4/11/2022
+ * Last Edited: 4/13/2022
  * 
  * Description: Hero ship controller
 ****/
@@ -121,7 +121,24 @@ public class Hero : MonoBehaviour
     //Taking Damage
     private void OnTriggerEnter(Collider other)
     {
+        Transform rootT = other.gameObject.transform.root;
 
+        GameObject go = rootT.gameObject;
+
+        if (go == lastTriggerGo) { return; }
+
+        lastTriggerGo = go;
+
+        if (go.tag == "Enemy")
+        {
+            Debug.Log("Triggered by Enemy" + other.gameObject.name);
+            shieldLevel--;
+            Destroy(go);
+        }
+        else
+        {
+            Debug.Log("Triggered by non-Enemy" + other.gameObject.name);
+        }
     }//end OnTriggerEnter()
 
 }
