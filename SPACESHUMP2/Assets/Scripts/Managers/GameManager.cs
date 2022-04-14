@@ -18,6 +18,7 @@ using UnityEngine.SceneManagement; //libraries for accessing scenes
 //Setting the enum outside the class allows for direct access by the enum (classes) name directly in other classes.
 public enum GameState { Title, Playing, BeatLevel, LostLevel, GameOver, Idle , Testing };
 //enum of game states (work like it's own class)
+[RequireComponent(typeof(AudioSource))]
 
 public class GameManager : MonoBehaviour
 {
@@ -63,6 +64,10 @@ public class GameManager : MonoBehaviour
     private int defaultHighScore = 1000;
     static public int highScore = 1000; // the default High Score
     public int HighScore { get { return highScore; } set { highScore = value; } }//access to private variable highScore [get/set methods]
+
+    [Space(10)]
+    public AudioClip backgroundMusicClip;
+    private AudioSource audioSource;
 
     [Space(10)]
     
@@ -137,9 +142,18 @@ public class GameManager : MonoBehaviour
     //Start is called once before the update
     void Start()
     {
+        if (backgroundMusicClip != null)
+        {
+            audioSource = gm.GetComponent<AudioSource>();
+            audioSource.volume = 0.5f;
+            audioSource.clip = backgroundMusicClip;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+
         //if we run play the game from the level instead of start scene (PLAYTESTING ONLY)
         if (currentSceneName != startScene) { SetGameState(GameState.Testing); }//set the game state for testing }
-
+        
         }//end Start()
 
 
@@ -300,7 +314,6 @@ public class GameManager : MonoBehaviour
         if (lives == 1) //if there is one life left and it is lost
         {
             SetGameState(GameState.LostLevel); //set the state to Lost Level
-
         } 
         else
         {
